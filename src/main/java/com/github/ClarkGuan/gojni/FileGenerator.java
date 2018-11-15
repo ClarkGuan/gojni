@@ -415,10 +415,102 @@ class FunctionGenerator {
         switch (name) {
             case "String":
             case "Class":
+            case "Throwable":
+            case "AbstractMethodError":
+            case "Appendable":
+            case "ArithmeticException":
+            case "ArrayIndexOutOfBoundsException":
+            case "ArrayStoreException":
+            case "AssertionError":
+            case "AutoCloseable":
+            case "Boolean":
+            case "BootstrapMethodError":
+            case "Byte":
+            case "Character":
+            case "CharSequence":
+            case "ClassCastException":
+            case "ClassCircularityError":
+            case "ClassFormatError":
+            case "ClassLoader":
+            case "ClassNotFoundException":
+            case "ClassValue":
+            case "Cloneable":
+            case "CloneNotSupportedException":
+            case "Comparable":
+            case "Compiler":
+            case "Double":
+            case "Enum":
+            case "EnumConstantNotPresentException":
+            case "Error":
+            case "Exception":
+            case "ExceptionInInitializerError":
+            case "Float":
+            case "IllegalAccessError":
+            case "IllegalAccessException":
+            case "IllegalArgumentException":
+            case "IllegalMonitorStateException":
+            case "IllegalStateException":
+            case "IllegalThreadStateException":
+            case "IncompatibleClassChangeError":
+            case "IndexOutOfBoundsException":
+            case "InheritableThreadLocal":
+            case "InstantiationError":
+            case "InstantiationException":
+            case "Integer":
+            case "InternalError":
+            case "InterruptedException":
+            case "Iterable":
+            case "LinkageError":
+            case "Long":
+            case "Math":
+            case "NegativeArraySizeException":
+            case "NoClassDefFoundError":
+            case "NoSuchFieldError":
+            case "NoSuchFieldException":
+            case "NoSuchMethodError":
+            case "NoSuchMethodException":
+            case "NullPointerException":
+            case "Number":
+            case "NumberFormatException":
+            case "Object":
+            case "OutOfMemoryError":
+            case "Package":
+            case "Process":
+            case "ProcessBuilder":
+            case "Readable":
+            case "ReflectiveOperationException":
+            case "Runnable":
+            case "Runtime":
+            case "RuntimeException":
+            case "RuntimePermission":
+            case "SecurityException":
+            case "SecurityManager":
+            case "Short":
+            case "StackOverflowError":
+            case "StackTraceElement":
+            case "StrictMath":
+            case "StringBuffer":
+            case "StringBuilder":
+            case "StringIndexOutOfBoundsException":
+            case "System":
+            case "Thread":
+            case "ThreadDeath":
+            case "ThreadGroup":
+            case "ThreadLocal":
+            case "TypeNotPresentException":
+            case "UnknownError":
+            case "UnsatisfiedLinkError":
+            case "UnsupportedClassVersionError":
+            case "UnsupportedOperationException":
+            case "VerifyError":
+            case "VirtualMachineError":
+            case "Void":
                 return "java.lang." + name;
         }
 
-        throw new RuntimeException("找不到类型：" + name);
+        System.err.println("找不到类型：" + name);
+        // 看做是当前 Java Package 的类型
+        return typeGenerator.getFileGenerator().getJavaPackageName() + "." + name;
     }
 
     private String jniArrayTypeMap(ArrayType type) {
