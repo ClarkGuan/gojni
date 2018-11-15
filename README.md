@@ -105,8 +105,6 @@ void JNI_OnUnload(JavaVM *vm, void *reserved) {
 
 libs.go:
 ```go
-// 此文件为动态生成的，请不要修改！
-
 package main
 
 //

@@ -38,8 +38,6 @@ void JNI_OnUnload(JavaVM *vm, void *reserved) {
 >>
 
 goCode(code) ::= <<
-// 此文件为动态生成的，请不要修改！
-
 package <code.packageName>
 
 //
