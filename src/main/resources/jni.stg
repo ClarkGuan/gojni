@@ -1,0 +1,102 @@
+header(code) ::= <<
+// 此文件为动态生成的，请不要修改！
+
+#include \<stdlib.h>
+#include \<stdio.h>
+#include \<stddef.h>
+#include \<stdint.h>
+#include \<jni.h>
+
+#include "_cgo_export.h"
+
+extern void jniOnLoad(GoUintptr vm);
+extern void jniOnUnload(GoUintptr vm);
+
+<code.classes:declareCfuncs(); separator="\n\n">
+
+jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+    JNIEnv *env = NULL;
+    if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {
+        fprintf(stderr, "[%s:%d] GetEnv() return error\n", __FILE__, __LINE__);
+        abort();
+    }
+
+    jclass clazz;
+    JNINativeMethod methods[255];
+    jint size;
+    char *name;
+
+    <code.classes:registerClass(); separator="\n\n">
+
+    jniOnLoad((GoUintptr) vm);
+    return JNI_VERSION_1_6;
+}
+
+void JNI_OnUnload(JavaVM *vm, void *reserved) {
+    jniOnUnload((GoUintptr) vm);
+}
+>>
+
+goCode(code) ::= <<
+// 此文件为动态生成的，请不要修改！
+
+package <code.packageName>
+
+//
+// #include \<stdlib.h>
+// #include \<stddef.h>
+// #include \<stdint.h>
+import "C"
+
+//export jniOnLoad
+func jniOnLoad(vm uintptr) {
+    // TODO
+}
+
+//export jniOnUnload
+func jniOnUnload(vm uintptr) {
+    // TODO
+}
+
+<code.classes:declareGoFuncs(); separator="\n\n">
+>>
+
+declareCfuncs(class) ::= <<
+<class.jniMethods:declareSingleCfunc(); separator="\n">
+>>
+
+declareSingleCfunc(method) ::= <<
+extern <method.cReturnType> <method.name>(<method.cSignature>);
+>>
+
+registerClass(class) ::= <<
+name = "<class.name>";
+clazz = (*env)->FindClass(env, name);
+size = 0;
+
+<class.jniMethods:registerMethod(); separator="\n\n">
+
+if ((*env)->RegisterNatives(env, clazz, methods, size) != 0) {
+    fprintf(stderr, "[%s:%d] %s RegisterNatives() return error\n", __FILE__, __LINE__, name);
+    abort();
+}
+>>
+
+registerMethod(method) ::= <<
+methods[size].fnPtr = <method.name>;
+methods[size].name = "<method.javaName>";
+methods[size].signature = "<method.javaSignature>";
+size++;
+>>
+
+declareGoFuncs(class) ::= <<
+<class.jniMethods:declareSingleGoFunc(); separator="\n\n">
+>>
+
+declareSingleGoFunc(method) ::= <<
+//export <method.name>
+func <method.name>(<method.goSignature>) <if(method.hasReturnType)><method.goReturnType> <endif>{
+    // TODO
+    <if(method.hasReturnType)>return <method.goReturnZero><endif>
+}
+>>

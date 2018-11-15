@@ -1,0 +1,30 @@
+plugins {
+    id 'application'
+}
+
+group 'com.github.ClarkGuan.gojni'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+mainClassName = 'com.github.ClarkGuan.gojni.Main'
+
+distributions {
+    main {
+        baseName = 'gojni'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/commons-cli/commons-cli
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    // https://mvnrepository.com/artifact/org.eclipse.jdt/org.eclipse.jdt.core
+    compile group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.core', version: '3.15.0'
+    // https://mvnrepository.com/artifact/org.antlr/ST4
+    compile group: 'org.antlr', name: 'ST4', version: '4.0.8'
+}
