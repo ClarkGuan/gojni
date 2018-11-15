@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
@@ -27,6 +28,7 @@ import java.util.List;
 
 class FileGenerator {
     private String packageName = "main";
+    private String javaPackageName;
     private List<String> imports;
     private List<TypeGenerator> classes;
 
@@ -69,6 +71,9 @@ class FileGenerator {
             }
             throw new IOException(sb.toString());
         }
+
+        PackageDeclaration packageDeclaration = compilationUnit.getPackage();
+        javaPackageName = packageDeclaration.getName().getFullyQualifiedName();
 
         List<ImportDeclaration> importDeclarations = compilationUnit.imports();
         if (importDeclarations != null && !importDeclarations.isEmpty()) {
@@ -119,6 +124,10 @@ class FileGenerator {
         return packageName;
     }
 
+    String getJavaPackageName() {
+        return javaPackageName;
+    }
+
     public List<TypeGenerator> getClasses() {
         return classes;
     }
@@ -167,7 +176,7 @@ class TypeGenerator {
 
     public String getName() {
         if (name == null) {
-            name = fileGenerator.getPackageName() + "." + typeDeclaration.getName().getIdentifier();
+            name = fileGenerator.getJavaPackageName() + "." + typeDeclaration.getName().getIdentifier();
             name = name.replace('.', '/');
         }
 
@@ -211,7 +220,7 @@ class FunctionGenerator {
         {
             StringBuilder sb = new StringBuilder();
             sb.append("jni_")
-                    .append(typeGenerator.getFileGenerator().getPackageName().replace('.', '_'))
+                    .append(typeGenerator.getFileGenerator().getJavaPackageName().replace('.', '_'))
                     .append('_')
                     .append(methodDeclaration.getName().getIdentifier())
                     .append(index);
@@ -221,7 +230,7 @@ class FunctionGenerator {
         {
             StringBuilder sb = new StringBuilder();
             sb.append("go_")
-                    .append(typeGenerator.getFileGenerator().getPackageName().replace('.', '_'))
+                    .append(typeGenerator.getFileGenerator().getJavaPackageName().replace('.', '_'))
                     .append('_')
                     .append(methodDeclaration.getName().getIdentifier())
                     .append(index);

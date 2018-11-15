@@ -28,6 +28,8 @@ gojni xxx.java
 ### 举例
 
 ```java
+package edu.buaa;
+
 public class Main {
     static {
         System.loadLibrary("hello");
@@ -64,7 +66,7 @@ libs.c:
 extern void jniOnLoad(GoUintptr vm);
 extern void jniOnUnload(GoUintptr vm);
 
-extern void jni_main_nativeHello1(GoUintptr env, GoUintptr clazz);
+extern void jni_edu_buaa_nativeHello1(GoUintptr env, GoUintptr clazz);
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     JNIEnv *env = NULL;
@@ -78,11 +80,11 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     jint size;
     char *name;
 
-    name = "main/Main";
+    name = "edu/buaa/Main";
     clazz = (*env)->FindClass(env, name);
     size = 0;
 
-    methods[size].fnPtr = jni_main_nativeHello1;
+    methods[size].fnPtr = jni_edu_buaa_nativeHello1;
     methods[size].name = "nativeHello";
     methods[size].signature = "()V";
     size++;
@@ -123,8 +125,8 @@ func jniOnUnload(vm uintptr) {
     // TODO
 }
 
-//export jni_main_nativeHello1
-func jni_main_nativeHello1(env uintptr, clazz uintptr) {
+//export jni_edu_buaa_nativeHello1
+func jni_edu_buaa_nativeHello1(env uintptr, clazz uintptr) {
     // TODO
 }
 ```
